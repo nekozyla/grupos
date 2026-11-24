@@ -13,8 +13,8 @@
     :root {
       --bg-light: #f6f4fb;
       --bg-dark: #0c0b12;
-      --surface-light: rgba(255, 255, 255, 0.84);
-      --surface-dark: rgba(24, 22, 36, 0.78);
+      --surface-light: rgba(255, 255, 255, 0.86);
+      --surface-dark: rgba(24, 22, 36, 0.84);
       --border-light: rgba(109, 40, 217, 0.14);
       --border-dark: rgba(196, 181, 253, 0.14);
       --text-light: #181424;
@@ -27,10 +27,6 @@
       --accent-contrast-dark: #140f24;
       --chip-light: rgba(109, 40, 217, 0.1);
       --chip-dark: rgba(167, 139, 250, 0.14);
-      --ok-light: #15803d;
-      --ok-dark: #4ade80;
-      --err-light: #b91c1c;
-      --err-dark: #f87171;
 
       --bg: var(--bg-dark);
       --surface: var(--surface-dark);
@@ -40,8 +36,6 @@
       --accent: var(--accent-dark);
       --accent-contrast: var(--accent-contrast-dark);
       --chip: var(--chip-dark);
-      --ok: var(--ok-dark);
-      --err: var(--err-dark);
 
       color-scheme: light dark;
       accent-color: var(--accent);
@@ -58,8 +52,6 @@
         --accent: var(--accent-light);
         --accent-contrast: var(--accent-contrast-light);
         --chip: var(--chip-light);
-        --ok: var(--ok-light);
-        --err: var(--err-light);
       }
     }
 
@@ -73,8 +65,6 @@
         --accent: light-dark(var(--accent-light), var(--accent-dark));
         --accent-contrast: light-dark(var(--accent-contrast-light), var(--accent-contrast-dark));
         --chip: light-dark(var(--chip-light), var(--chip-dark));
-        --ok: light-dark(var(--ok-light), var(--ok-dark));
-        --err: light-dark(var(--err-light), var(--err-dark));
       }
     }
 
@@ -120,6 +110,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
+      width: fit-content;
       padding: 0.3rem 0.85rem;
       border-radius: 999px;
       background: var(--chip);
@@ -164,7 +155,7 @@
       -webkit-backdrop-filter: blur(14px);
       display: flex;
       flex-direction: column;
-      gap: 0.9rem;
+      gap: 0.95rem;
       transition: transform 0.18s ease, border-color 0.18s ease;
     }
 
@@ -213,7 +204,8 @@
       gap: 0.65rem;
     }
 
-    .btn-primary {
+    .btn-primary,
+    .btn-secondary {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -221,101 +213,53 @@
       min-height: 42px;
       padding: 0.55rem 1.15rem;
       border-radius: 12px;
-      background: var(--accent);
-      color: var(--accent-contrast);
+      font-family: inherit;
       font-weight: 600;
       font-size: 0.95rem;
       text-decoration: none;
-      transition: opacity 0.15s ease, transform 0.15s ease;
+      cursor: pointer;
+      transition: opacity 0.15s ease, background-color 0.18s ease, border-color 0.15s ease;
+    }
+
+    .btn-primary {
+      border: none;
+      background: var(--accent);
+      color: var(--accent-contrast);
     }
 
     .btn-primary:hover {
       opacity: 0.92;
     }
 
-    .btn-primary[data-cooling="true"] {
+    .btn-secondary {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--chip);
+    }
+
+    .btn-primary[data-cooling="true"],
+    .btn-secondary[data-cooling="true"] {
       background: #6b7280;
+      border-color: #6b7280;
       color: #f3f4f6;
       opacity: 0.78;
       cursor: wait;
     }
 
-    .btn-primary[data-cooling="true"]:hover {
+    .btn-primary[data-cooling="true"]:hover,
+    .btn-secondary[data-cooling="true"]:hover {
       opacity: 0.78;
     }
 
     .btn-primary:focus-visible,
-    .copy-button:focus-visible {
+    .btn-secondary:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
-    }
-
-    .copy {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .copy-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      min-inline-size: 24px;
-      min-block-size: 42px;
-      padding: 0.5rem 0.95rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: border-color 0.15s ease, background-color 0.15s ease;
-    }
-
-    .copy-button:hover {
-      border-color: var(--accent);
-      background: var(--chip);
-    }
-
-    .copy-button[data-copied] {
-      border-color: var(--ok);
-      color: var(--ok);
-    }
-
-    .copy-button[data-failed] {
-      border-color: var(--err);
-      color: var(--err);
-    }
-
-    .tip {
-      font-size: 0.85rem;
-      font-weight: 500;
-      opacity: 0;
-      transition: opacity 0.18s ease;
-      pointer-events: none;
-    }
-
-    .copy-button[data-copied] + .tip {
-      opacity: 1;
-      color: var(--ok);
-    }
-
-    .copy-button[data-failed] + .tip {
-      opacity: 1;
-      color: var(--err);
-    }
-
-    .sr-only-link {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
     }
 
     footer {
@@ -327,7 +271,7 @@
 
     dialog.twitter-dialog {
       margin: auto;
-      width: min(92vw, 430px);
+      width: min(92vw, 440px);
       border: 1px solid var(--border);
       border-radius: 22px;
       padding: 1.5rem;
@@ -345,7 +289,7 @@
     dialog.twitter-dialog::backdrop {
       overflow: hidden;
       overscroll-behavior: contain;
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0, 0, 0, 0.58);
       backdrop-filter: blur(4px);
     }
 
@@ -355,9 +299,33 @@
       gap: 0.9rem;
     }
 
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .dialog-close {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.25rem;
+      line-height: 1;
+      padding: 0.25rem 0.45rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .dialog-close:hover {
+      color: var(--text);
+      background: var(--chip);
+    }
+
     .dialog-content h1 {
       font-size: 1.35rem;
       line-height: 1.25;
+      text-align: left;
     }
 
     .dialog-actions {
@@ -371,7 +339,7 @@
     @media (prefers-reduced-motion: reduce) {
       .card,
       .btn-primary,
-      .copy-button {
+      .btn-secondary {
         transition: none;
       }
       .card:hover {
@@ -400,16 +368,13 @@
           </div>
         </div>
         <div class="actions">
-          <a class="btn-primary" href="https://chat.whatsapp.com/J4oSTTMaSVF8IMt2aw1TlL?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer">
+          <button
+            type="button"
+            class="btn-primary join-trigger"
+            data-group-name="Criador de Figurinhas"
+            data-group-url="https://chat.whatsapp.com/J4oSTTMaSVF8IMt2aw1TlL?s=cl&p=a&iam=2">
             Entrar no grupo
-          </a>
-          <span class="copy">
-            <button type="button" class="copy-button" command="--copy" commandfor="link-figurinhas">
-              Copiar link
-            </button>
-            <span class="tip" role="status"></span>
-          </span>
-          <span id="link-figurinhas" class="sr-only-link">https://chat.whatsapp.com/J4oSTTMaSVF8IMt2aw1TlL?s=cl&p=a&iam=2</span>
+          </button>
         </div>
       </article>
 
@@ -422,16 +387,13 @@
           </div>
         </div>
         <div class="actions">
-          <a class="btn-primary" href="https://chat.whatsapp.com/BZnd5SFcgLe34khwqNhpoN?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer">
+          <button
+            type="button"
+            class="btn-primary join-trigger"
+            data-group-name="Grupo de Bate Papo"
+            data-group-url="https://chat.whatsapp.com/BZnd5SFcgLe34khwqNhpoN?s=cl&p=a&iam=2">
             Entrar no grupo
-          </a>
-          <span class="copy">
-            <button type="button" class="copy-button" command="--copy" commandfor="link-batepapo">
-              Copiar link
-            </button>
-            <span class="tip" role="status"></span>
-          </span>
-          <span id="link-batepapo" class="sr-only-link">https://chat.whatsapp.com/BZnd5SFcgLe34khwqNhpoN?s=cl&p=a&iam=2</span>
+          </button>
         </div>
       </article>
 
@@ -444,16 +406,13 @@
           </div>
         </div>
         <div class="actions">
-          <a class="btn-primary" href="https://chat.whatsapp.com/I8PbGv39SRqJllhw9cKc0s?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer">
+          <button
+            type="button"
+            class="btn-primary join-trigger"
+            data-group-name="Grupo Apenas pro /RPG"
+            data-group-url="https://chat.whatsapp.com/I8PbGv39SRqJllhw9cKc0s?s=cl&p=a&iam=2">
             Entrar no grupo
-          </a>
-          <span class="copy">
-            <button type="button" class="copy-button" command="--copy" commandfor="link-rpg">
-              Copiar link
-            </button>
-            <span class="tip" role="status"></span>
-          </span>
-          <span id="link-rpg" class="sr-only-link">https://chat.whatsapp.com/I8PbGv39SRqJllhw9cKc0s?s=cl&p=a&iam=2</span>
+          </button>
         </div>
       </article>
     </section>
@@ -465,123 +424,101 @@
 
   <dialog id="twitter-dialog" class="twitter-dialog" closedby="any" aria-labelledby="twitter-dialog-title">
     <div class="dialog-content">
-      <span class="badge">𝕏 Atualizações</span>
+      <div class="dialog-header">
+        <span class="badge">𝕏 Atualizações</span>
+        <form method="dialog">
+          <button type="submit" class="dialog-close" aria-label="Fechar">✕</button>
+        </form>
+      </div>
       <h1 id="twitter-dialog-title">Considere seguir o bot no Twitter</h1>
-      <p>Siga <strong>@JuliaZap_Bot</strong> no X para acompanhar atualizações, novidades e avisos sobre os grupos.</p>
+      <p id="twitter-dialog-desc">
+        Siga <strong>@JuliaZap_Bot</strong> no X para acompanhar atualizações e novidades antes de entrar no grupo.
+      </p>
       <div class="dialog-actions">
         <a class="btn-primary" href="https://x.com/JuliaZap_Bot" target="_blank" rel="noopener noreferrer" autofocus>
           Seguir @JuliaZap_Bot
         </a>
-        <form method="dialog">
-          <button type="submit" class="copy-button">Fechar</button>
-        </form>
+        <a id="proceed-group-btn" class="btn-secondary" href="#" target="_blank" rel="noopener noreferrer" data-cooling="true" aria-disabled="true">
+          Ir para o grupo (2s)
+        </a>
       </div>
     </div>
   </dialog>
 
   <script>
-    const timers = new WeakMap();
-    let lastAnnouncement = '';
-
-    function legacyCopy(text) {
-      const previousFocus = document.activeElement;
-      const field = Object.assign(document.createElement('textarea'), { value: text });
-      field.setAttribute('readonly', '');
-      field.style.cssText = 'position:fixed;inset-block-start:0;opacity:0';
-      document.body.append(field);
-      field.select();
-      try {
-        return document.execCommand('copy');
-      } finally {
-        field.remove();
-        previousFocus?.focus({ preventScroll: true });
-      }
-    }
-
-    function report(button, ok) {
-      const tip = button.nextElementSibling;
-      if (!tip) return;
-      clearTimeout(timers.get(button));
-      button.removeAttribute('data-copied');
-      button.removeAttribute('data-failed');
-
-      let message = ok ? 'Copiado!' : 'Falha ao copiar';
-      if (message === lastAnnouncement) message += '\u00A0';
-      lastAnnouncement = message;
-
-      tip.textContent = '';
-      void button.offsetWidth;
-      button.setAttribute(ok ? 'data-copied' : 'data-failed', '');
-      requestAnimationFrame(() => {
-        tip.textContent = message;
-      });
-
-      timers.set(button, setTimeout(() => {
-        button.removeAttribute('data-copied');
-        button.removeAttribute('data-failed');
-        tip.textContent = '';
-      }, 2000));
-    }
-
-    async function copyFromTarget(button, target) {
-      const text = target.matches('input, textarea')
-        ? target.value
-        : (target.textContent || '').trim();
-      if (!text) return;
-
-      try {
-        await navigator.clipboard.writeText(text);
-        report(button, true);
-      } catch {
-        if (legacyCopy(text)) {
-          report(button, true);
-        } else {
-          report(button, false);
-        }
-      }
-    }
-
-    document.addEventListener('command', (event) => {
-      if (event.command === '--copy') {
-        copyFromTarget(event.source, event.target);
-      }
-    }, true);
-
-    if (!('CommandEvent' in window)) {
-      document.addEventListener('click', (event) => {
-        if (event.defaultPrevented) return;
-        const button = event.target.closest('button[command="--copy"]');
-        if (!button) return;
-        const target = document.getElementById(button.getAttribute('commandfor'));
-        if (target) copyFromTarget(button, target);
-      });
-    }
-
     const twitterDialog = document.getElementById('twitter-dialog');
-    const joinButtons = document.querySelectorAll('.groups-grid .btn-primary');
+    const dialogDesc = document.getElementById('twitter-dialog-desc');
+    const proceedBtn = document.getElementById('proceed-group-btn');
+    const joinTriggers = document.querySelectorAll('.join-trigger');
 
-    for (const joinBtn of joinButtons) {
-      joinBtn.addEventListener('click', (event) => {
-        if (joinBtn.dataset.cooling === 'true') {
-          event.preventDefault();
+    let countdownTimer = null;
+
+    function resetProceedCooldown(groupUrl) {
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+
+      let secondsLeft = 2;
+      proceedBtn.href = groupUrl;
+      proceedBtn.dataset.cooling = 'true';
+      proceedBtn.setAttribute('aria-disabled', 'true');
+      proceedBtn.textContent = `Ir para o grupo (${secondsLeft}s)`;
+
+      countdownTimer = setInterval(() => {
+        secondsLeft -= 1;
+        if (secondsLeft > 0) {
+          proceedBtn.textContent = `Ir para o grupo (${secondsLeft}s)`;
           return;
         }
 
-        joinBtn.dataset.cooling = 'true';
-        joinBtn.setAttribute('aria-disabled', 'true');
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        delete proceedBtn.dataset.cooling;
+        proceedBtn.removeAttribute('aria-disabled');
+        proceedBtn.textContent = 'Ir para o grupo';
+      }, 1000);
+    }
 
-        setTimeout(() => {
-          delete joinBtn.dataset.cooling;
-          joinBtn.removeAttribute('aria-disabled');
-        }, 2000);
+    proceedBtn.addEventListener('click', (event) => {
+      if (proceedBtn.dataset.cooling === 'true') {
+        event.preventDefault();
+        return;
+      }
+      if (twitterDialog.open) {
+        twitterDialog.close();
+      }
+    });
 
-        if (twitterDialog && !twitterDialog.open) {
+    for (const trigger of joinTriggers) {
+      trigger.addEventListener('click', () => {
+        const groupName = trigger.dataset.groupName || 'grupo';
+        const groupUrl = trigger.dataset.groupUrl || '#';
+
+        dialogDesc.innerHTML = '';
+        dialogDesc.append(
+          'Siga ',
+          Object.assign(document.createElement('strong'), { textContent: '@JuliaZap_Bot' }),
+          ` no X para acompanhar atualizações e novidades antes de entrar em `,
+          Object.assign(document.createElement('strong'), { textContent: groupName }),
+          '.'
+        );
+
+        resetProceedCooldown(groupUrl);
+        if (!twitterDialog.open) {
           twitterDialog.showModal();
         }
       });
     }
 
-    if (twitterDialog && !('closedBy' in HTMLDialogElement.prototype)) {
+    twitterDialog.addEventListener('close', () => {
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+    });
+
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
       const isOutside = (e, dialog) => {
         const r = dialog.getBoundingClientRect();
         return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
