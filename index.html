@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Links oficiais dos grupos da Julia WhatsApp Bot: Figurinhas, Bate Papo e RPG.">
+  <title>Julia Bot — Grupos Oficiais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f6f4fb;
+      --bg-dark: #0c0b12;
+      --surface-light: rgba(255, 255, 255, 0.84);
+      --surface-dark: rgba(24, 22, 36, 0.78);
+      --border-light: rgba(109, 40, 217, 0.14);
+      --border-dark: rgba(196, 181, 253, 0.14);
+      --text-light: #181424;
+      --text-dark: #f4f2fa;
+      --muted-light: #59526b;
+      --muted-dark: #aca6be;
+      --accent-light: #6d28d9;
+      --accent-dark: #a78bfa;
+      --accent-contrast-light: #ffffff;
+      --accent-contrast-dark: #140f24;
+      --chip-light: rgba(109, 40, 217, 0.1);
+      --chip-dark: rgba(167, 139, 250, 0.14);
+      --ok-light: #15803d;
+      --ok-dark: #4ade80;
+      --err-light: #b91c1c;
+      --err-dark: #f87171;
+
+      --bg: var(--bg-dark);
+      --surface: var(--surface-dark);
+      --border: var(--border-dark);
+      --text: var(--text-dark);
+      --muted: var(--muted-dark);
+      --accent: var(--accent-dark);
+      --accent-contrast: var(--accent-contrast-dark);
+      --chip: var(--chip-dark);
+      --ok: var(--ok-dark);
+      --err: var(--err-dark);
+
+      color-scheme: light dark;
+      accent-color: var(--accent);
+      scrollbar-color: var(--muted) transparent;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: var(--bg-light);
+        --surface: var(--surface-light);
+        --border: var(--border-light);
+        --text: var(--text-light);
+        --muted: var(--muted-light);
+        --accent: var(--accent-light);
+        --accent-contrast: var(--accent-contrast-light);
+        --chip: var(--chip-light);
+        --ok: var(--ok-light);
+        --err: var(--err-light);
+      }
+    }
+
+    @supports (color: light-dark(white, black)) {
+      :root {
+        --bg: light-dark(var(--bg-light), var(--bg-dark));
+        --surface: light-dark(var(--surface-light), var(--surface-dark));
+        --border: light-dark(var(--border-light), var(--border-dark));
+        --text: light-dark(var(--text-light), var(--text-dark));
+        --muted: light-dark(var(--muted-light), var(--muted-dark));
+        --accent: light-dark(var(--accent-light), var(--accent-dark));
+        --accent-contrast: light-dark(var(--accent-contrast-light), var(--accent-contrast-dark));
+        --chip: light-dark(var(--chip-light), var(--chip-dark));
+        --ok: light-dark(var(--ok-light), var(--ok-dark));
+        --err: light-dark(var(--err-light), var(--err-dark));
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100dvh;
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(680px circle at 12% 10%, rgba(139, 92, 246, 0.18), transparent 60%),
+        radial-gradient(560px circle at 88% 85%, rgba(236, 72, 153, 0.14), transparent 60%);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1.25rem 3rem;
+      line-height: 1.5;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      background: var(--chip);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    h1, h2 {
+      text-wrap: balance;
+    }
+
+    h1 {
+      font-size: clamp(1.85rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    p {
+      text-wrap: pretty;
+      color: var(--muted);
+    }
+
+    .subtitle {
+      max-width: 52ch;
+      font-size: 1.02rem;
+    }
+
+    .groups-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.35rem 1.4rem;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+    }
+
+    .card-icon {
+      width: 46px;
+      height: 46px;
+      flex: none;
+      border-radius: 14px;
+      background: var(--chip);
+      display: grid;
+      place-items: center;
+      font-size: 1.45rem;
+    }
+
+    .card-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .card h2 {
+      font-size: 1.18rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: 42px;
+      padding: 0.55rem 1.15rem;
+      border-radius: 12px;
+      background: var(--accent);
+      color: var(--accent-contrast);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+    }
+
+    .btn-primary:focus-visible,
+    .copy-button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .copy {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-inline-size: 24px;
+      min-block-size: 42px;
+      padding: 0.5rem 0.95rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .copy-button:hover {
+      border-color: var(--accent);
+      background: var(--chip);
+    }
+
+    .copy-button[data-copied] {
+      border-color: var(--ok);
+      color: var(--ok);
+    }
+
+    .copy-button[data-failed] {
+      border-color: var(--err);
+      color: var(--err);
+    }
+
+    .tip {
+      font-size: 0.85rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      pointer-events: none;
+    }
+
+    .copy-button[data-copied] + .tip {
+      opacity: 1;
+      color: var(--ok);
+    }
+
+    .copy-button[data-failed] + .tip {
+      opacity: 1;
+      color: var(--err);
+    }
+
+    .sr-only-link {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .support-card {
+      margin-top: 0.25rem;
+      border-style: dashed;
+    }
+
+    .pix-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .pix-code {
+      padding: 0.45rem 0.8rem;
+      border-radius: 10px;
+      background: var(--chip);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.9rem;
+      color: var(--text);
+      user-select: all;
+    }
+
+    footer {
+      margin-top: 0.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card,
+      .btn-primary,
+      .copy-button {
+        transition: none;
+      }
+      .card:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <span class="badge">✨ Julia WhatsApp Bot</span>
+      <h1>Grupos Oficiais</h1>
+      <p class="subtitle">
+        Escolha um dos grupos oficiais abaixo para criar figurinhas, conversar ou jogar RPG com a Julia.
+      </p>
+    </header>
+
+    <section class="groups-grid" aria-label="Lista de grupos oficiais">
+      <article class="card">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true">🎨</div>
+          <div class="card-title-wrap">
+            <h2>Criador de Figurinhas</h2>
+            <p>Transforme fotos, vídeos e GIFs em figurinhas e personalize seus pacotes com o bot.</p>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn-primary" href="https://chat.whatsapp.com/J4oSTTMaSVF8IMt2aw1TlL?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer">
+            Entrar no grupo
+          </a>
+          <span class="copy">
+            <button type="button" class="copy-button" command="--copy" commandfor="link-figurinhas">
+              Copiar link
+            </button>
+            <span class="tip" role="status"></span>
+          </span>
+          <span id="link-figurinhas" class="sr-only-link">https://chat.whatsapp.com/J4oSTTMaSVF8IMt2aw1TlL?s=cl&p=a&iam=2</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true">💬</div>
+          <div class="card-title-wrap">
+            <h2>Grupo de Bate Papo</h2>
+            <p>Espaço aberto para conversar, usar comandos de música, diversão e interagir com a Julia.</p>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn-primary" href="https://chat.whatsapp.com/BZnd5SFcgLe34khwqNhpoN?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer">
+            Entrar no grupo
+          </a>
+          <span class="copy">
+            <button type="button" class="copy-button" command="--copy" commandfor="link-batepapo">
+              Copiar link
+            </button>
+            <span class="tip" role="status"></span>
+          </span>
+          <span id="link-batepapo" class="sr-only-link">https://chat.whatsapp.com/BZnd5SFcgLe34khwqNhpoN?s=cl&p=a&iam=2</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true">⚔️</div>
+          <div class="card-title-wrap">
+            <h2>Grupo Apenas pro /RPG</h2>
+            <p>Dedicado às aventuras do /rpg: masmorras, forja, habilidades, chefes e duelos.</p>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn-primary" href="https://chat.whatsapp.com/I8PbGv39SRqJllhw9cKc0s?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer">
+            Entrar no grupo
+          </a>
+          <span class="copy">
+            <button type="button" class="copy-button" command="--copy" commandfor="link-rpg">
+              Copiar link
+            </button>
+            <span class="tip" role="status"></span>
+          </span>
+          <span id="link-rpg" class="sr-only-link">https://chat.whatsapp.com/I8PbGv39SRqJllhw9cKc0s?s=cl&p=a&iam=2</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="card support-card" aria-label="Apoio e aluguel">
+      <div class="card-head">
+        <div class="card-icon" aria-hidden="true">💜</div>
+        <div class="card-title-wrap">
+          <h2>Quer a Julia no seu próprio grupo ou apoiar o projeto?</h2>
+          <p>Envie <strong>/aluguel</strong> no privado do bot para ver os planos, ou apoie com qualquer valor via PIX:</p>
+        </div>
+      </div>
+      <div class="pix-row">
+        <code id="pix-key" class="pix-code">emily@nekozyla.com.br</code>
+        <span class="copy">
+          <button type="button" class="copy-button" command="--copy" commandfor="pix-key">
+            Copiar PIX
+          </button>
+          <span class="tip" role="status"></span>
+        </span>
+      </div>
+    </section>
+
+    <footer>
+      <p>Julia WhatsApp Bot • Dica: envie <strong>/grupos</strong> no privado do bot a qualquer momento.</p>
+    </footer>
+  </main>
+
+  <script>
+    const timers = new WeakMap();
+    let lastAnnouncement = '';
+
+    function legacyCopy(text) {
+      const previousFocus = document.activeElement;
+      const field = Object.assign(document.createElement('textarea'), { value: text });
+      field.setAttribute('readonly', '');
+      field.style.cssText = 'position:fixed;inset-block-start:0;opacity:0';
+      document.body.append(field);
+      field.select();
+      try {
+        return document.execCommand('copy');
+      } finally {
+        field.remove();
+        previousFocus?.focus({ preventScroll: true });
+      }
+    }
+
+    function report(button, ok) {
+      const tip = button.nextElementSibling;
+      if (!tip) return;
+      clearTimeout(timers.get(button));
+      button.removeAttribute('data-copied');
+      button.removeAttribute('data-failed');
+
+      let message = ok ? 'Copiado!' : 'Falha ao copiar';
+      if (message === lastAnnouncement) message += '\u00A0';
+      lastAnnouncement = message;
+
+      tip.textContent = '';
+      void button.offsetWidth;
+      button.setAttribute(ok ? 'data-copied' : 'data-failed', '');
+      requestAnimationFrame(() => {
+        tip.textContent = message;
+      });
+
+      timers.set(button, setTimeout(() => {
+        button.removeAttribute('data-copied');
+        button.removeAttribute('data-failed');
+        tip.textContent = '';
+      }, 2000));
+    }
+
+    async function copyFromTarget(button, target) {
+      const text = target.matches('input, textarea')
+        ? target.value
+        : (target.textContent || '').trim();
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        report(button, true);
+      } catch {
+        if (legacyCopy(text)) {
+          report(button, true);
+        } else {
+          report(button, false);
+        }
+      }
+    }
+
+    document.addEventListener('command', (event) => {
+      if (event.command === '--copy') {
+        copyFromTarget(event.source, event.target);
+      }
+    }, true);
+
+    if (!('CommandEvent' in window)) {
+      document.addEventListener('click', (event) => {
+        if (event.defaultPrevented) return;
+        const button = event.target.closest('button[command="--copy"]');
+        if (!button) return;
+        const target = document.getElementById(button.getAttribute('commandfor'));
+        if (target) copyFromTarget(button, target);
+      });
+    }
+  </script>
+</body>
+</html>
