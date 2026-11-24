@@ -233,6 +233,17 @@
       opacity: 0.92;
     }
 
+    .btn-primary[data-cooling="true"] {
+      background: #6b7280;
+      color: #f3f4f6;
+      opacity: 0.78;
+      cursor: wait;
+    }
+
+    .btn-primary[data-cooling="true"]:hover {
+      opacity: 0.78;
+    }
+
     .btn-primary:focus-visible,
     .copy-button:focus-visible {
       outline: 2px solid var(--accent);
@@ -312,6 +323,49 @@
       text-align: center;
       font-size: 0.85rem;
       color: var(--muted);
+    }
+
+    dialog.twitter-dialog {
+      margin: auto;
+      width: min(92vw, 430px);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 1.5rem;
+      background: var(--surface);
+      color: var(--text);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    dialog.twitter-dialog:modal {
+      overscroll-behavior: contain;
+    }
+
+    dialog.twitter-dialog::backdrop {
+      overflow: hidden;
+      overscroll-behavior: contain;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+    }
+
+    .dialog-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .dialog-content h1 {
+      font-size: 1.35rem;
+      line-height: 1.25;
+    }
+
+    .dialog-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: 0.25rem;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -409,6 +463,22 @@
     </footer>
   </main>
 
+  <dialog id="twitter-dialog" class="twitter-dialog" closedby="any" aria-labelledby="twitter-dialog-title">
+    <div class="dialog-content">
+      <span class="badge">𝕏 Atualizações</span>
+      <h1 id="twitter-dialog-title">Considere seguir o bot no Twitter</h1>
+      <p>Siga <strong>@JuliaZap_Bot</strong> no X para acompanhar atualizações, novidades e avisos sobre os grupos.</p>
+      <div class="dialog-actions">
+        <a class="btn-primary" href="https://x.com/JuliaZap_Bot" target="_blank" rel="noopener noreferrer" autofocus>
+          Seguir @JuliaZap_Bot
+        </a>
+        <form method="dialog">
+          <button type="submit" class="copy-button">Fechar</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
   <script>
     const timers = new WeakMap();
     let lastAnnouncement = '';
@@ -484,6 +554,46 @@
         if (!button) return;
         const target = document.getElementById(button.getAttribute('commandfor'));
         if (target) copyFromTarget(button, target);
+      });
+    }
+
+    const twitterDialog = document.getElementById('twitter-dialog');
+    const joinButtons = document.querySelectorAll('.groups-grid .btn-primary');
+
+    for (const joinBtn of joinButtons) {
+      joinBtn.addEventListener('click', (event) => {
+        if (joinBtn.dataset.cooling === 'true') {
+          event.preventDefault();
+          return;
+        }
+
+        joinBtn.dataset.cooling = 'true';
+        joinBtn.setAttribute('aria-disabled', 'true');
+
+        setTimeout(() => {
+          delete joinBtn.dataset.cooling;
+          joinBtn.removeAttribute('aria-disabled');
+        }, 2000);
+
+        if (twitterDialog && !twitterDialog.open) {
+          twitterDialog.showModal();
+        }
+      });
+    }
+
+    if (twitterDialog && !('closedBy' in HTMLDialogElement.prototype)) {
+      const isOutside = (e, dialog) => {
+        const r = dialog.getBoundingClientRect();
+        return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+      };
+      let pressedOutside = false;
+      twitterDialog.addEventListener('pointerdown', (e) => {
+        pressedOutside = isOutside(e, twitterDialog);
+      });
+      twitterDialog.addEventListener('pointerup', (e) => {
+        if (pressedOutside && isOutside(e, twitterDialog)) {
+          twitterDialog.close();
+        }
       });
     }
   </script>
