@@ -27,6 +27,10 @@
       --accent-contrast-dark: #140f24;
       --chip-light: rgba(109, 40, 217, 0.1);
       --chip-dark: rgba(167, 139, 250, 0.14);
+      --ok-light: #15803d;
+      --ok-dark: #4ade80;
+      --err-light: #b91c1c;
+      --err-dark: #f87171;
 
       --bg: var(--bg-dark);
       --surface: var(--surface-dark);
@@ -36,6 +40,8 @@
       --accent: var(--accent-dark);
       --accent-contrast: var(--accent-contrast-dark);
       --chip: var(--chip-dark);
+      --ok: var(--ok-dark);
+      --err: var(--err-dark);
 
       color-scheme: light dark;
       accent-color: var(--accent);
@@ -52,6 +58,8 @@
         --accent: var(--accent-light);
         --accent-contrast: var(--accent-contrast-light);
         --chip: var(--chip-light);
+        --ok: var(--ok-light);
+        --err: var(--err-light);
       }
     }
 
@@ -65,6 +73,8 @@
         --accent: light-dark(var(--accent-light), var(--accent-dark));
         --accent-contrast: light-dark(var(--accent-contrast-light), var(--accent-contrast-dark));
         --chip: light-dark(var(--chip-light), var(--chip-dark));
+        --ok: light-dark(var(--ok-light), var(--ok-dark));
+        --err: light-dark(var(--err-light), var(--err-dark));
       }
     }
 
@@ -257,16 +267,91 @@
     }
 
     .btn-primary:focus-visible,
-    .btn-secondary:focus-visible {
+    .btn-secondary:focus-visible,
+    .copy-button:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
 
-    footer {
-      margin-top: 0.5rem;
-      text-align: center;
+    .copy {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-inline-size: 24px;
+      min-block-size: 42px;
+      padding: 0.5rem 0.95rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .copy-button:hover {
+      border-color: var(--accent);
+      background: var(--chip);
+    }
+
+    .copy-button[data-copied] {
+      border-color: var(--ok);
+      color: var(--ok);
+    }
+
+    .copy-button[data-failed] {
+      border-color: var(--err);
+      color: var(--err);
+    }
+
+    .tip {
       font-size: 0.85rem;
-      color: var(--muted);
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      pointer-events: none;
+    }
+
+    .copy-button[data-copied] + .tip {
+      opacity: 1;
+      color: var(--ok);
+    }
+
+    .copy-button[data-failed] + .tip {
+      opacity: 1;
+      color: var(--err);
+    }
+
+    .support-card {
+      margin-top: 0.25rem;
+      border-style: dashed;
+    }
+
+    .pix-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .pix-code {
+      padding: 0.45rem 0.8rem;
+      border-radius: 10px;
+      background: var(--chip);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.9rem;
+      color: var(--text);
+      user-select: all;
     }
 
     dialog.twitter-dialog {
@@ -379,9 +464,24 @@
       </article>
     </section>
 
-    <footer>
-      <p>Julia WhatsApp Bot • Dica: envie <strong>/grupos</strong> no privado do bot a qualquer momento.</p>
-    </footer>
+    <section class="card support-card" aria-label="Apoio via PIX">
+      <div class="card-head">
+        <div class="card-icon" aria-hidden="true">💜</div>
+        <div class="card-title-wrap">
+          <h2>Apoie o projeto</h2>
+          <p>Qualquer valor via PIX ajuda a manter o servidor da Julia online e sempre atualizado:</p>
+        </div>
+      </div>
+      <div class="pix-row">
+        <code id="pix-key" class="pix-code">emily@nekozyla.com.br</code>
+        <span class="copy">
+          <button type="button" class="copy-button" command="--copy" commandfor="pix-key">
+            Copiar PIX
+          </button>
+          <span class="tip" role="status"></span>
+        </span>
+      </div>
+    </section>
   </main>
 
   <dialog id="twitter-dialog" class="twitter-dialog" closedby="any" aria-labelledby="twitter-dialog-title">
@@ -493,6 +593,83 @@
         if (pressedOutside && isOutside(e, twitterDialog)) {
           twitterDialog.close();
         }
+      });
+    }
+
+    const timers = new WeakMap();
+    let lastAnnouncement = '';
+
+    function legacyCopy(text) {
+      const previousFocus = document.activeElement;
+      const field = Object.assign(document.createElement('textarea'), { value: text });
+      field.setAttribute('readonly', '');
+      field.style.cssText = 'position:fixed;inset-block-start:0;opacity:0';
+      document.body.append(field);
+      field.select();
+      try {
+        return document.execCommand('copy');
+      } finally {
+        field.remove();
+        previousFocus?.focus({ preventScroll: true });
+      }
+    }
+
+    function report(button, ok) {
+      const tip = button.nextElementSibling;
+      if (!tip) return;
+      clearTimeout(timers.get(button));
+      button.removeAttribute('data-copied');
+      button.removeAttribute('data-failed');
+
+      let message = ok ? 'Copiado!' : 'Falha ao copiar';
+      if (message === lastAnnouncement) message += '\u00A0';
+      lastAnnouncement = message;
+
+      tip.textContent = '';
+      void button.offsetWidth;
+      button.setAttribute(ok ? 'data-copied' : 'data-failed', '');
+      requestAnimationFrame(() => {
+        tip.textContent = message;
+      });
+
+      timers.set(button, setTimeout(() => {
+        button.removeAttribute('data-copied');
+        button.removeAttribute('data-failed');
+        tip.textContent = '';
+      }, 2000));
+    }
+
+    async function copyFromTarget(button, target) {
+      const text = target.matches('input, textarea')
+        ? target.value
+        : (target.textContent || '').trim();
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        report(button, true);
+      } catch {
+        if (legacyCopy(text)) {
+          report(button, true);
+        } else {
+          report(button, false);
+        }
+      }
+    }
+
+    document.addEventListener('command', (event) => {
+      if (event.command === '--copy') {
+        copyFromTarget(event.source, event.target);
+      }
+    }, true);
+
+    if (!('CommandEvent' in window)) {
+      document.addEventListener('click', (event) => {
+        if (event.defaultPrevented) return;
+        const button = event.target.closest('button[command="--copy"]');
+        if (!button) return;
+        const target = document.getElementById(button.getAttribute('commandfor'));
+        if (target) copyFromTarget(button, target);
       });
     }
   </script>
